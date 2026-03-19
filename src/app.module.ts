@@ -5,8 +5,6 @@ import { envValidationSchema } from './config/env.validation';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RecipesModule } from './modules/recipes/recipes.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,7 +29,5 @@ import { AppService } from './app.service';
     AuthModule,
     RecipesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
