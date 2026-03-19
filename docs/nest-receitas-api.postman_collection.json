@@ -1,0 +1,151 @@
+{
+  "info": {
+    "name": "Nest Receitas API",
+    "_postman_id": "9d68d84a-7bb5-4f95-a2f8-0f7e7a5d4b21",
+    "description": "Collection para autenticacao e receitas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"{{login}}\",\n  \"senha\": \"{{senha}}\"\n}"
+        },
+        "url": "{{baseUrl}}/auth/login"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "const data = pm.response.json();",
+              "if (data && data.access_token) {",
+              "  pm.environment.set('accessToken', data.access_token);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth - Me",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/me"
+      }
+    },
+    {
+      "name": "Auth - Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/logout"
+      }
+    },
+    {
+      "name": "Recipes - Listar",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/recipes"
+      }
+    },
+    {
+      "name": "Recipes - Criar",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"idCategoria\": 1,\n  \"nome\": \"Bolo de Cenoura\",\n  \"tempoPreparoMinutos\": 45,\n  \"porcoes\": 8,\n  \"modoPreparo\": \"Misture os ingredientes e asse.\",\n  \"ingredientes\": \"cenoura, farinha, ovos, acucar\"\n}"
+        },
+        "url": "{{baseUrl}}/recipes"
+      }
+    },
+    {
+      "name": "Recipes - Buscar por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/recipes/{{recipeId}}"
+      }
+    },
+    {
+      "name": "Recipes - Atualizar",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Bolo de Cenoura com Cobertura\"\n}"
+        },
+        "url": "{{baseUrl}}/recipes/{{recipeId}}"
+      }
+    },
+    {
+      "name": "Recipes - Remover",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/recipes/{{recipeId}}"
+      }
+    }
+  ]
+}
