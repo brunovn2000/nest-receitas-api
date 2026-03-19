@@ -17,7 +17,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "TS_NODE_TRANSPILE_ONLY=true node ./node_modules/typeorm/cli-ts-node-commonjs.js",
+    "migration:show": "NODE_OPTIONS='--max-old-space-size=768' TS_NODE_TRANSPILE_ONLY=true node ./node_modules/typeorm/cli-ts-node-commonjs.js migration:show -d src/config/typeorm.config.ts",
+    "migration:run": "NODE_OPTIONS='--max-old-space-size=768' TS_NODE_TRANSPILE_ONLY=true node ./node_modules/typeorm/cli-ts-node-commonjs.js migration:run -d src/config/typeorm.config.ts",
+    "migration:generate": "sh -c 'name=\"$npm_config_name\"; for arg in \"$@\"; do case \"$arg\" in --name=*) name=\"${arg#--name=}\" ;; esac; done; if [ -z \"$name\" ]; then echo \"Erro: informe o nome da migration. Exemplo: pnpm run migration:generate --name=AddCategorias\"; exit 1; fi; NODE_OPTIONS=\"--max-old-space-size=768\" TS_NODE_TRANSPILE_ONLY=true node ./node_modules/typeorm/cli-ts-node-commonjs.js migration:generate src/database/migrations/$name -d src/config/typeorm.config.ts' --",
+    "migration:revert": "NODE_OPTIONS='--max-old-space-size=768' TS_NODE_TRANSPILE_ONLY=true node ./node_modules/typeorm/cli-ts-node-commonjs.js migration:revert -d src/config/typeorm.config.ts",
+    "migration:create": "sh -c 'name=\"$npm_config_name\"; for arg in \"$@\"; do case \"$arg\" in --name=*) name=\"${arg#--name=}\" ;; esac; done; if [ -z \"$name\" ]; then echo \"Erro: informe o nome da migration. Exemplo: pnpm run migration:create --name=AddCategorias\"; exit 1; fi; NODE_OPTIONS=\"--max-old-space-size=768\" TS_NODE_TRANSPILE_ONLY=true node ./node_modules/typeorm/cli-ts-node-commonjs.js migration:create src/database/migrations/$name' --"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -31,6 +37,7 @@
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
+    "dotenv": "^17.3.1",
     "joi": "^18.0.2",
     "mysql2": "^3.20.0",
     "passport": "^0.7.0",
