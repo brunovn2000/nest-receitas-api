@@ -19,12 +19,12 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 100 })
   login: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, select: false })
   senha: string;
 
-  @CreateDateColumn({ name: 'criado_em', type: 'datetime' })
+  @CreateDateColumn({ name: 'criado_em', type: 'datetime', select: false })
   criadoEm: Date;
 
-  @UpdateDateColumn({ name: 'alterado_em', type: 'datetime' })
+  @UpdateDateColumn({ name: 'alterado_em', type: 'datetime', select: false })
   alteradoEm: Date;
 }

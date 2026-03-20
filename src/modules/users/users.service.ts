@@ -37,7 +37,10 @@ export class UsersService {
   }
 
   async findByLogin(login: string): Promise<UserEntity | null> {
-    return this.usersRepository.findOne({ where: { login } });
+    return this.usersRepository.findOne({
+      where: { login },
+      select: ['id', 'nome', 'login', 'senha'],
+    });
   }
 
   async findById(id: number): Promise<UserEntity> {
