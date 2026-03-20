@@ -5,6 +5,7 @@ import { envValidationSchema } from './config/env.validation';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RecipesModule } from './modules/recipes/recipes.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,6 +29,7 @@ import { RecipesModule } from './modules/recipes/recipes.module';
     UsersModule,
     AuthModule,
     RecipesModule,
+    CategoriesModule,
   ],
 })
 export class AppModule {}

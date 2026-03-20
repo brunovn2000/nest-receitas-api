@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { UserEntity } from '../../users/entities/user.entity';
-import { CategoryEntity } from './category.entity';
+import { CategoryEntity } from '../../categories/entities/category.entity';
 
 @Entity({ name: 'receitas' })
 export class RecipeEntity {

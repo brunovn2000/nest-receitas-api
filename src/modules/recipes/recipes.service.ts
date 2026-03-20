@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { RecipeEntity } from './entities/recipe.entity';
-import { CategoryEntity } from './entities/category.entity';
+import { CategoryEntity } from '../categories/entities/category.entity';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { UserEntity } from '../users/entities/user.entity';

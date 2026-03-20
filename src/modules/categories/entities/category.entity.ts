@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { RecipeEntity } from './recipe.entity';
+import { RecipeEntity } from '../../recipes/entities/recipe.entity';
 
 @Entity({ name: 'categorias' })
 @Unique('nome_UNIQUE', ['nome'])

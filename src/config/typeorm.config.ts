@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { DataSource } from 'typeorm';
 import { UserEntity } from '../modules/users/entities/user.entity';
-import { CategoryEntity } from '../modules/recipes/entities/category.entity';
+import { CategoryEntity } from '../modules/categories/entities/category.entity';
 import { RecipeEntity } from '../modules/recipes/entities/recipe.entity';
 
 export default new DataSource({
