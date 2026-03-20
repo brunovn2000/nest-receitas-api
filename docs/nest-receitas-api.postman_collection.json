@@ -7,6 +7,23 @@
   },
   "item": [
     {
+      "name": "Users - Criar",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Usuario Teste\",\n  \"login\": \"{{login}}\",\n  \"senha\": \"{{senha}}\"\n}"
+        },
+        "url": "{{baseUrl}}/users"
+      }
+    },
+    {
       "name": "Auth - Login",
       "request": {
         "method": "POST",
@@ -67,6 +84,19 @@
       }
     },
     {
+      "name": "Categories - Listar",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/categories"
+      }
+    },
+    {
       "name": "Recipes - Listar",
       "request": {
         "method": "GET",
@@ -85,17 +115,49 @@
         "method": "POST",
         "header": [
           {
-            "key": "Content-Type",
-            "value": "application/json"
-          },
-          {
             "key": "Authorization",
             "value": "Bearer {{accessToken}}"
           }
         ],
         "body": {
-          "mode": "raw",
-          "raw": "{\n  \"idCategoria\": 1,\n  \"nome\": \"Bolo de Cenoura\",\n  \"tempoPreparoMinutos\": 45,\n  \"porcoes\": 8,\n  \"modoPreparo\": \"Misture os ingredientes e asse.\",\n  \"ingredientes\": \"cenoura, farinha, ovos, acucar\"\n}"
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "categoryId",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "nome",
+              "value": "Bolo de Cenoura",
+              "type": "text"
+            },
+            {
+              "key": "tempoPreparoMinutos",
+              "value": "45",
+              "type": "text"
+            },
+            {
+              "key": "porcoes",
+              "value": "8",
+              "type": "text"
+            },
+            {
+              "key": "modoPreparo",
+              "value": "Misture os ingredientes e asse.",
+              "type": "text"
+            },
+            {
+              "key": "ingredientes",
+              "value": "cenoura, farinha, ovos, acucar",
+              "type": "text"
+            },
+            {
+              "key": "imagem",
+              "type": "file",
+              "src": []
+            }
+          ]
         },
         "url": "{{baseUrl}}/recipes"
       }
@@ -119,17 +181,24 @@
         "method": "PATCH",
         "header": [
           {
-            "key": "Content-Type",
-            "value": "application/json"
-          },
-          {
             "key": "Authorization",
             "value": "Bearer {{accessToken}}"
           }
         ],
         "body": {
-          "mode": "raw",
-          "raw": "{\n  \"nome\": \"Bolo de Cenoura com Cobertura\"\n}"
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "nome",
+              "value": "Bolo de Cenoura com Cobertura",
+              "type": "text"
+            },
+            {
+              "key": "imagem",
+              "type": "file",
+              "src": []
+            }
+          ]
         },
         "url": "{{baseUrl}}/recipes/{{recipeId}}"
       }
@@ -145,6 +214,19 @@
           }
         ],
         "url": "{{baseUrl}}/recipes/{{recipeId}}"
+      }
+    },
+    {
+      "name": "Recipes - Imprimir",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/recipes/{{recipeId}}/print"
       }
     }
   ]

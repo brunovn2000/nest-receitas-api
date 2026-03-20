@@ -30,6 +30,9 @@ export class RecipeEntity {
   @Column({ type: 'text', nullable: true })
   ingredientes: string | null;
 
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  imagem: string | null;
+
   @CreateDateColumn({ name: 'criado_em', type: 'datetime' })
   criadoEm: Date;
 

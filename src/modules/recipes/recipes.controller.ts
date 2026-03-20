@@ -10,9 +10,13 @@ import {
   Query,
   Req,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { multerOptions } from '../../config/multer.config';
 import { RecipesService } from './recipes.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
@@ -27,8 +31,14 @@ export class RecipesController {
 
   @Post()
   @ApiOperation({ summary: 'Cadastrar receita' })
-  create(@Req() req: any, @Body() dto: CreateRecipeDto) {
-    return this.recipesService.create(req.user.userId, dto);
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('imagem', multerOptions))
+  create(
+    @Req() req: any,
+    @Body() dto: CreateRecipeDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.recipesService.create(req.user.userId, dto, file);
   }
 
   @Get()
@@ -45,12 +55,15 @@ export class RecipesController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Editar receita' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('imagem', multerOptions))
   update(
     @Req() req: any,
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateRecipeDto,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
-    return this.recipesService.update(id, req.user.userId, dto);
+    return this.recipesService.update(id, req.user.userId, dto, file);
   }
 
   @Delete(':id')

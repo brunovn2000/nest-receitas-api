@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { RecipeEntity } from './entities/recipe.entity';
@@ -18,9 +19,24 @@ export class RecipesService {
     private readonly recipesRepository: Repository<RecipeEntity>,
     @InjectRepository(CategoryEntity)
     private readonly categoriesRepository: Repository<CategoryEntity>,
+    private readonly configService: ConfigService,
   ) {}
 
-  async create(userId: number, dto: CreateRecipeDto) {
+  private formatRecipeImageUrl(recipe: RecipeEntity): RecipeEntity {
+    if (recipe.imagem && !recipe.imagem.startsWith('http')) {
+      const appUrl = this.configService.get<string>('APP_URL');
+      recipe.imagem = `${appUrl}${recipe.imagem}`;
+    }
+    return recipe;
+  }
+
+  async create(
+    userId: number,
+    dto: CreateRecipeDto,
+    file?: Express.Multer.File,
+  ) {
+    const imagemUrl = file ? `/uploads/recipes/${file.filename}` : null;
+
     const recipe = this.recipesRepository.create({
       nome: dto.nome ?? null,
       tempoPreparoMinutos: dto.tempoPreparoMinutos ?? null,
@@ -31,13 +47,15 @@ export class RecipesService {
       categoria: dto.categoryId
         ? ({ id: dto.categoryId } as CategoryEntity)
         : null,
+      imagem: imagemUrl,
     });
 
-    return this.recipesRepository.save(recipe);
+    const result = await this.recipesRepository.save(recipe);
+    return this.formatRecipeImageUrl(result);
   }
 
   async findAllByUser(userId: number, search?: string) {
-    return this.recipesRepository.find({
+    const recipes = await this.recipesRepository.find({
       where: {
         usuario: { id: userId },
         ...(search ? { nome: Like(`%${search}%`) } : {}),
@@ -45,6 +63,8 @@ export class RecipesService {
       relations: ['categoria', 'usuario'],
       order: { id: 'DESC' },
     });
+
+    return recipes.map((recipe) => this.formatRecipeImageUrl(recipe));
   }
 
   async findOneOwnedByUser(id: number, userId: number) {
@@ -61,11 +81,20 @@ export class RecipesService {
       throw new ForbiddenException('Acesso negado');
     }
 
-    return recipe;
+    return this.formatRecipeImageUrl(recipe);
   }
 
-  async update(id: number, userId: number, dto: UpdateRecipeDto) {
+  async update(
+    id: number,
+    userId: number,
+    dto: UpdateRecipeDto,
+    file?: Express.Multer.File,
+  ) {
     const recipe = await this.findOneOwnedByUser(id, userId);
+
+    if (file) {
+      recipe.imagem = `/uploads/recipes/${file.filename}`;
+    }
 
     if (dto.categoryId !== undefined) {
       recipe.categoria = dto.categoryId
@@ -82,7 +111,8 @@ export class RecipesService {
       ingredientes: dto.ingredientes ?? recipe.ingredientes,
     });
 
-    return this.recipesRepository.save(recipe);
+    const result = await this.recipesRepository.save(recipe);
+    return this.formatRecipeImageUrl(result);
   }
 
   async remove(id: number, userId: number) {
@@ -101,6 +131,7 @@ export class RecipesService {
       porcoes: recipe.porcoes,
       ingredientes: recipe.ingredientes,
       modoPreparo: recipe.modoPreparo,
+      imagem: recipe.imagem,
     };
   }
 }

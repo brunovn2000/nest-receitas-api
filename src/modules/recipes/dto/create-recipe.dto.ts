@@ -33,4 +33,8 @@ export class CreateRecipeDto {
   @IsOptional()
   @IsString()
   ingredientes?: string;
+
+  @ApiProperty({ type: 'string', format: 'binary', required: false })
+  @IsOptional()
+  imagem?: any;
 }
